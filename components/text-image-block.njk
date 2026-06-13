@@ -1,0 +1,87 @@
+{# =========================
+   components/text-image-block.njk — Ticker gauche rapide (toujours actif)
+   ========================= #}
+<section class="py-20 text-image-block alignment-{{ properties.alignment }} bg-block-{{ properties.background }} component" data-component-id="{{ componentId }}">
+  {% set tickerText = (properties.ticker_text or '  Tokyo  Boosts | #1 Wallet Friendly Boosting Service') %}
+
+  <div class="hb-ticker" role="region" aria-label="Highlights">
+    <div class="hb-track" style="--speed: 22s">
+      <div class="hb-group">
+        {% for _ in [1,2,3,4,5,6,7,8] %}
+          <span class="hb-item">{{ tickerText }}</span>
+          <span class="hb-dot">•</span>
+        {% endfor %}
+      </div>
+      <div class="hb-group" aria-hidden="true">
+        {% for _ in [1,2,3,4,5,6,7,8] %}
+          <span class="hb-item">{{ tickerText }}</span>
+          <span class="hb-dot">•</span>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <div class="container mt-4">
+    <div class="row">
+      <div class="col-12 {{ 'col-lg-6' if properties.alignment != 'center' }}">
+        {% if properties.title %}
+          <div class="section-title"><h2>{{ properties.title | renderString }}</h2></div>
+        {% endif %}
+        {% if properties.subtitle %}
+          <div class="section-subtitle"><p>{{ properties.subtitle | renderString }}</p></div>
+        {% endif %}
+        <p class="whitespace-pre-line">{{ properties.text | renderString }}</p>
+
+        {% if properties.cta and properties.cta_text %}
+          <a href="{{ properties.cta | shopUrl }}" class="btn btn-primary mt-4">
+            {{ properties.cta_text }}
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="height:1rem;width:1rem;vertical-align:-0.125em">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/>
+            </svg>
+          </a>
+        {% endif %}
+      </div>
+
+      <div class="col-12 {{ 'col-lg-6' if properties.alignment != 'center' }} {{ ('aspect-' + properties.aspect_ratio) if (properties.aspect_ratio and properties.aspect_ratio != 'Default') }}">
+        <img src="{{ properties.image | imageUrl }}" alt="" class="img-fluid" loading="lazy" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+.text-image-block.component[data-component-id="{{ componentId }}"] .hb-ticker{
+  --accent: var(--mono-accent, #ff5aa0);
+  --accent2:#ff88bd;
+  position:relative; overflow:hidden;
+  border-top:1px solid rgba(255,255,255,.08);
+  border-bottom:1px solid rgba(255,255,255,.08);
+  background:linear-gradient(90deg,var(--accent2),var(--accent));
+  box-shadow:0 10px 30px rgba(255,90,160,.15);
+  -webkit-mask-image:linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+          mask-image:linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+}
+
+.text-image-block.component[data-component-id="{{ componentId }}"] .hb-track{
+  --speed: 2s;
+  display:flex; width:max-content; white-space:nowrap; will-change:transform;
+  animation: hb-move-left var(--speed) linear infinite !important; 
+}
+
+.text-image-block.component[data-component-id="{{ componentId }}"] .hb-group{
+  display:flex; align-items:center; gap:28px; padding:10px 28px;
+  font-weight:800; letter-spacing:.02em; color:#1a0f16;
+  text-shadow:0 1px 0 rgba(255,255,255,.35);
+  flex-shrink:0;
+}
+.text-image-block.component[data-component-id="{{ componentId }}"] .hb-item{ color:#1a0f16 }
+.text-image-block.component[data-component-id="{{ componentId }}"] .hb-dot{ opacity:.6 }
+
+
+@keyframes hb-move-left {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+
+</style>

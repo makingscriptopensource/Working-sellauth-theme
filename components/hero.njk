@@ -1,0 +1,265 @@
+{# =========================
+   components/hero.njk — Hyper style (float + smooth reveal)
+   ========================= #}
+
+<section class="hb-hero component" data-component-id="{{ componentId }}">
+  <div class="hb-wrap">
+    
+    <div class="hb-col left">
+      <div class="hb-pill ani ani-1">
+        <i class="fa-solid fa-wand-magic-sparkles"></i>
+        <span>Premium Discord Services</span>
+      </div>
+
+      <h1 class="hb-title ani ani-2">
+        Boost Your<br/>
+        Server The <span class="accent">Right Way</span><br/>
+        at Discounted Rates!
+      </h1>
+
+      <p class="hb-sub ani ani-3">
+        Welcome to DaylyStore, your ultimate destination for unleashing the
+        full potential of your Discord server! Introducing our cutting-edge Nitro
+        Tokens and Server Boosting service, designed to elevate your Discord
+        experience to new heights.
+      </p>
+
+      <div class="hb-ctas ani ani-4">
+        <a class="hb-btn primary" href="{{ '#products' | shopUrl }}">
+          <i class="fa-solid fa-bag-shopping"></i> Shop Now
+          <i class="fa-solid fa-arrow-right-long arr"></i>
+        </a>
+        <a class="hb-btn ghost" href="{{ shop.discord_url or 'https://discord.gg/tokyomarket' }}" target="_blank" rel="noopener">
+          <i class="fa-brands fa-discord"></i> Join Discord
+        </a>
+      </div>
+
+      <div class="hb-stats ani ani-5" id="hb-stats-{{ componentId }}">
+        <div class="hb-stat">
+          <div class="v">2000+</div>
+          <div class="l">Active Users</div>
+        </div>
+        <div class="hb-stat">
+          <div class="v">100+</div>
+          <div class="l">Servers Boosted</div>
+        </div>
+        <div class="hb-stat">
+          <div class="v">&lt;5m</div>
+          <div class="l">Response Time</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hb-col right">
+      <div class="phone-wrap ani ani-6">
+        <div class="pink-blob" aria-hidden="true"></div>
+        <img class="phone" src="https://i.postimg.cc/nLzV40NJ/phone-3.webp" alt="Phone preview">
+        <span class="spark sp1" aria-hidden="true"></span>
+        <span class="spark sp2" aria-hidden="true"></span>
+        <span class="spark sp3" aria-hidden="true"></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+.hb-hero[data-component-id="{{ componentId }}"]{
+  --accent: var(--mono-accent, #ffffff);
+  --ink: #f4f6fb;
+  --muted:#c7c9d6;
+  --stroke: rgba(255,255,255,.08);
+  position: relative;
+  margin: clamp(36px, 5vw, 70px) 0 8px; 
+  z-index: 0;
+}
+.hb-hero[data-component-id="{{ componentId }}"] .hb-wrap{
+  max-width: 1180px; margin: 0 auto; padding: 0 18px;
+  display: grid; gap: 20px; grid-template-columns: 1.1fr .9fr;
+  align-items: flex-start;
+}
+
+
+.hb-hero[data-component-id="{{ componentId }}"] .ani{
+  opacity: 0; transform: translateY(14px) scale(.98);
+  transition: opacity .55s cubic-bezier(.22,1,.36,1),
+              transform .55s cubic-bezier(.22,1,.36,1),
+              filter .55s ease;
+  will-change: opacity, transform, filter;
+}
+.hb-hero[data-component-id="{{ componentId }}"].ready .ani{
+  opacity:1; transform: none; filter: none;
+}
+.hb-hero[data-component-id="{{ componentId }}"] .ani-1{ transition-delay:.02s }
+.hb-hero[data-component-id="{{ componentId }}"] .ani-2{ transition-delay:.08s }
+.hb-hero[data-component-id="{{ componentId }}"] .ani-3{ transition-delay:.16s }
+.hb-hero[data-component-id="{{ componentId }}"] .ani-4{ transition-delay:.22s }
+.hb-hero[data-component-id="{{ componentId }}"] .ani-5{ transition-delay:.30s }
+.hb-hero[data-component-id="{{ componentId }}"] .ani-6{ transition-delay:.36s }
+
+
+.hb-hero[data-component-id="{{ componentId }}"] .hb-pill{
+  display:inline-flex; align-items:center; gap:10px;
+  padding:10px 14px; border-radius:999px; color:#fff;
+  background: rgba(255,255,255,.16);
+  border:1px solid rgba(255,255,255,.25);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.12);
+  margin-bottom:8px; font-weight:700;
+}
+.hb-hero[data-component-id="{{ componentId }}"] .hb-title{
+  margin:0 0 8px; line-height:1.04;
+  font-weight:900; color:#fff;
+  font-size: clamp(38px, 5.6vw, 64px);
+  letter-spacing:.01em;
+}
+.hb-hero[data-component-id="{{ componentId }}"] .hb-title .accent{
+  background: linear-gradient(90deg, #ffffff, var(--accent));
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.hb-hero[data-component-id="{{ componentId }}"] .hb-sub{
+  margin:0 0 12px; color:var(--muted); max-width: 620px;
+}
+
+
+.hb-hero[data-component-id="{{ componentId }}"] .hb-ctas{
+  display:flex; gap:12px; flex-wrap:wrap; margin: 8px 0 10px;
+}
+.hb-hero[data-component-id="{{ componentId }}"] .hb-btn{
+  display:inline-flex; align-items:center; gap:10px;
+  padding:12px 18px; border-radius:12px; font-weight:900;
+  letter-spacing:.02em; text-decoration:none; border:1px solid var(--stroke);
+  transition: transform .18s ease, box-shadow .18s ease, background .18s ease, color .18s ease;
+}
+.hb-hero[data-component-id="{{ componentId }}"] .hb-btn.primary{
+  color:#101114; border-color:transparent;
+  background: linear-gradient(90deg, #ffffff, var(--accent));
+  box-shadow: 0 14px 34px rgba(255,255,255,.28), inset 0 1px 0 rgba(255,255,255,.22);
+}
+.hb-hero[data-component-id="{{ componentId }}"] .hb-btn.primary:hover{ transform: translateY(-2px); }
+.hb-hero[data-component-id="{{ componentId }}"] .hb-btn.primary .arr{ transition: transform .18s ease; }
+.hb-hero[data-component-id="{{ componentId }}"] .hb-btn.primary:hover .arr{ transform: translateX(4px); }
+.hb-hero[data-component-id="{{ componentId }}"] .hb-btn.ghost{
+  background: #151517; color:#fff;
+}
+.hb-hero[data-component-id="{{ componentId }}"] .hb-btn.ghost:hover{
+  background: #1b1b1f; transform: translateY(-2px);
+}
+
+
+.hb-hero[data-component-id="{{ componentId }}"] .hb-stats{
+  display:grid; gap:12px; grid-template-columns: repeat(3, minmax(0,1fr));
+  margin-top: 6px; max-width: 720px;
+}
+.hb-hero[data-component-id="{{ componentId }}"] .hb-stat{
+  position:relative; overflow:hidden;
+  border:1px solid var(--stroke); border-radius:16px; padding:16px;
+  background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.00));
+  box-shadow: 0 12px 30px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.04);
+  text-align:center;
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+.hb-hero[data-component-id="{{ componentId }}"] .hb-stat .v{
+  color:#fff; font-weight:900; font-size:20px; letter-spacing:.02em;
+}
+.hb-hero[data-component-id="{{ componentId }}"] .hb-stat .l{
+  color:#c9ccda; font-size:13px; margin-top:4px;
+}
+.hb-hero[data-component-id="{{ componentId }}"] .hb-stat::after{
+  content:""; position:absolute; inset:-1px; border-radius:inherit; pointer-events:none; opacity:0;
+  background:
+    radial-gradient(220px 180px at var(--mx, 50%) var(--my, 50%),
+      rgba(255,255,255,.28), rgba(255,255,255,.20), transparent 60%);
+  mix-blend-mode:screen; transition: opacity .18s ease;
+}
+.hb-hero[data-component-id="{{ componentId }}"] .hb-stat:hover{
+  transform: translateY(-6px);
+  border-color: color-mix(in oklab, var(--accent) 55%, transparent);
+  box-shadow:
+    0 18px 38px rgba(0,0,0,.55),
+    0 8px 28px rgba(255,255,255,.18),
+    inset 0 1px 0 rgba(255,255,255,.06);
+}
+.hb-hero[data-component-id="{{ componentId }}"] .hb-stat:hover::after{ opacity:1; }
+
+
+.hb-hero[data-component-id="{{ componentId }}"] .right{ display:flex; justify-content:center; }
+.hb-hero[data-component-id="{{ componentId }}"] .phone-wrap{
+  position:relative; width:min(520px, 44vw); aspect-ratio: 9/18;
+  display:flex; align-items:flex-end; justify-content:center;
+}
+@media (min-width: 1101px){
+  .hb-hero[data-component-id="{{ componentId }}"] .phone-wrap{ margin-top: -92px; }
+  .hb-hero[data-component-id="{{ componentId }}"] .pink-blob{ top: 8%; }
+}
+.hb-hero[data-component-id="{{ componentId }}"] .pink-blob{
+  position:absolute; right:4%; top:16%; width:100%; height:74%;
+  background: radial-gradient(70% 70% at 50% 50%,
+    rgba(255,255,255,.95) 0%,
+    rgba(255,255,255,.60) 45%,
+    rgba(255,255,255,.18) 78%,
+    transparent 90%);
+  filter: blur(2px); border-radius: 50%; z-index:0;
+}
+.hb-hero[data-component-id="{{ componentId }}"] .phone{
+  position:relative; z-index:1; width:100%; height:auto;
+  filter: drop-shadow(0 24px 36px rgba(0,0,0,.55));
+  animation: phone-float 7.2s ease-in-out .4s infinite alternate;
+  will-change: transform;
+}
+@keyframes phone-float{
+  0%   { transform: translateY(0) }
+  100% { transform: translateY(-12px) }
+}
+
+/* stars */
+.hb-hero[data-component-id="{{ componentId }}"] .spark{
+  position:absolute; width:18px; height:18px; z-index:2;
+  background:
+    radial-gradient(circle, #fff 0 40%, transparent 41%),
+    radial-gradient(circle at 100% 50%, #fff 0 25%, transparent 26%),
+    radial-gradient(circle at 0%   50%, #fff 0 25%, transparent 26%);
+  filter: drop-shadow(0 0 14px rgba(255,255,255,.45));
+  opacity:.95;
+}
+.hb-hero[data-component-id="{{ componentId }}"] .spark.sp1{ right:78%; top:8%; transform: scale(1.1) rotate(8deg); }
+.hb-hero[data-component-id="{{ componentId }}"] .spark.sp2{ right:6%;  top:12%; transform: scale(.9)  rotate(-8deg); }
+.hb-hero[data-component-id="{{ componentId }}"] .spark.sp3{ right:12%; top:44%; transform: scale(.7)  rotate(12deg); }
+
+/* Responsive */
+@media (max-width: 1100px){
+  .hb-hero[data-component-id="{{ componentId }}"] .hb-wrap{ grid-template-columns: 1fr; }
+  .hb-hero[data-component-id="{{ componentId }}"] .right{ order: -1; }
+  .hb-hero[data-component-id="{{ componentId }}"] .phone-wrap{ margin-top: 0; }
+  .hb-hero[data-component-id="{{ componentId }}"] .pink-blob{ top: 16%; }
+  .hb-hero[data-component-id="{{ componentId }}"] .hb-stats{ grid-template-columns: repeat(3,1fr); }
+}
+@media (max-width: 640px){
+  .hb-hero[data-component-id="{{ componentId }}"] .hb-stats{ grid-template-columns: 1fr; }
+  .hb-hero[data-component-id="{{ componentId }}"] .hb-title{ font-size: clamp(34px, 9vw, 48px); }
+  .hb-hero[data-component-id="{{ componentId }}"] .hb-btn{ width:100%; justify-content:center; }
+}
+</style>
+
+<script>
+(function(){
+  const root = document.querySelector('.hb-hero[data-component-id="{{ componentId }}"]');
+  if(!root) return;
+
+  const onReady = () => root.classList.add('ready');
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', onReady);
+  } else {
+    onReady();
+  }
+
+  root.querySelectorAll('.hb-stat').forEach(card=>{
+    card.addEventListener('mousemove', e=>{
+      const r = card.getBoundingClientRect();
+      card.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+      card.style.setProperty('--my', (e.clientY - r.top)  + 'px');
+    }, {passive:true});
+    card.addEventListener('mouseleave', ()=>{
+      card.style.removeProperty('--mx'); card.style.removeProperty('--my');
+    });
+  });
+})();
+</script>

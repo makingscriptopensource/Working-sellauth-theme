@@ -1,0 +1,293 @@
+{# =========================
+   pages/status-page.njk — Product Status (glass + neon, reveal, mouse glow) + Load More + Ungrouped section
+   ========================= #}
+<div class="container component status-scope" data-component-id="{{ componentId }}">
+  <section class="py-5-nav">
+
+   
+    <div class="status-head">
+      <div class="status-pill">
+        <span><i class="fa-solid fa-signal"></i> Live Product Status</span>
+      </div>
+      <div class="section-title status-title">
+        <h1>Product Status</h1>
+      </div>
+      <p class="status-sub">Real-time health for all services & packs.</p>
+    </div>
+
+    
+    <div class="status-legend">
+      <span class="lg it-ok"><i class="fa-solid fa-circle"></i> Operational</span>
+      <span class="lg it-warn"><i class="fa-solid fa-circle"></i> Degraded</span>
+      <span class="lg it-down"><i class="fa-solid fa-circle"></i> Outage</span>
+      <span class="lg it-hold"><i class="fa-solid fa-circle"></i> On Hold</span>
+    </div>
+
+   
+    <div class="row">
+      <div class="status-cards status-grid" id="statusGrid">
+        {# --- GROUPES --- #}
+        {% for product in sortedItems %}
+          {% if product.type == 'group' %}
+            <div class="status-group reveal">
+              <h2 class="group-title">
+                <i class="fa-regular fa-folder-open"></i> {{ product.name }}
+              </h2>
+              <div class="status-cards status-grid">
+                {% for product in product.products %}
+                  <div class="status-card-shell reveal mouse-glow">
+                    {% render_snippet "status-card.njk", product=product %}
+                  </div>
+                {% endfor %}
+              </div>
+            </div>
+          {% endif %}
+        {% endfor %}
+
+        {# --- HORS GROUPE (UNGROUPED) --- #}
+        {% set hasUngrouped = false %}
+        {% for p in sortedItems %}
+          {% if p.type != 'group' and not p.group_id %}
+            {% set hasUngrouped = true %}
+          {% endif %}
+        {% endfor %}
+
+        {% if hasUngrouped %}
+          <div class="status-group reveal">
+            <h2 class="group-title">
+              <i class="fa-regular fa-folder-open"></i> Ungrouped
+            </h2>
+            <div class="status-cards status-grid">
+              {% for product in sortedItems %}
+                {% if product.type != 'group' and not product.group_id %}
+                  <div class="status-card-shell reveal mouse-glow">
+                    {% render_snippet "status-card.njk", product=product %}
+                  </div>
+                {% endif %}
+              {% endfor %}
+            </div>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+
+  
+    <div class="status-pager" id="statusPager" hidden>
+      <button class="btn btn-primary" id="pagerBtn">Load more</button>
+      <div class="hint" id="pagerHint" aria-live="polite"></div>
+    </div>
+
+  </section>
+</div>
+
+<style>
+
+.status-scope[data-component-id="{{ componentId }}"]{
+  --accent:#ffffff;
+  --accent-2:#e6e6e6;
+  --ink:#f2f2f2;
+  --muted:#cfcfcf;
+  --panel: rgba(255,255,255,.06);
+  --stroke: rgba(255,255,255,.18);
+  --ring: 0 24px 60px rgba(0,0,0,.35);
+  color: var(--ink);
+}
+.status-scope[data-component-id="{{ componentId }}"] .status-head{
+  display:grid; place-items:center; gap:10px; margin-bottom:14px; text-align:center;
+}
+.status-scope[data-component-id="{{ componentId }}"] .status-pill span{
+  display:inline-flex; gap:.55rem; align-items:center; padding:8px 14px; border-radius:999px;
+  font-weight:800; letter-spacing:.02em; color:#111;
+  background:linear-gradient(90deg,var(--accent-2),var(--accent));
+  box-shadow:0 12px 26px rgba(255,255,255,.18), inset 0 1px 0 rgba(255,255,255,.45);
+}
+.status-scope[data-component-id="{{ componentId }}"] .status-title h1{
+  font-weight:900; letter-spacing:-.02em; line-height:1.04; margin:0;
+  font-size: clamp(36px, 5vw, 60px);
+  color:#fff; text-shadow:0 2px 0 rgba(0,0,0,.20), 0 18px 40px rgba(0,0,0,.35);
+}
+.status-scope[data-component-id="{{ componentId }}"] .status-sub{ color:var(--muted); margin:4px 0 0; }
+.status-scope[data-component-id="{{ componentId }}"] .status-legend{
+  display:flex; gap:14px; justify-content:center; flex-wrap:wrap; margin:14px 0 18px;
+}
+.status-scope[data-component-id="{{ componentId }}"] .status-legend .lg{
+  display:inline-flex; align-items:center; gap:.5rem; font-weight:700; color:var(--ink); opacity:.86;
+}
+.status-scope[data-component-id="{{ componentId }}"] .status-legend .lg i{ font-size:.7em }
+.status-scope[data-component-id="{{ componentId }}"] .status-legend .it-ok i{ color:#3ee58f }
+.status-scope[data-component-id="{{ componentId }}"] .status-legend .it-warn i{ color:#ffd766 }
+.status-scope[data-component-id="{{ componentId }}"] .status-legend .it-down i{ color:#ff6b6b }
+.status-scope[data-component-id="{{ componentId }}"] .status-legend .it-hold i{ color:#9aa2b1 }
+
+.status-scope[data-component-id="{{ componentId }}"] .status-grid{
+  display:grid; gap:14px; grid-template-columns: repeat( auto-fit, minmax(280px, 1fr) );
+}
+.status-scope[data-component-id="{{ componentId }}"] .status-group{ padding:6px 0 }
+.status-scope[data-component-id="{{ componentId }}"] .status-group .group-title{
+  font-size: clamp(18px,2.2vw,22px); font-weight:900; letter-spacing:.02em; margin:4px 2px 10px;
+  display:flex; align-items:center; gap:.6rem;
+}
+.status-scope[data-component-id="{{ componentId }}"] .status-group .group-title::after{
+  content:""; flex:1 1 auto; height:2px; margin-left:.6rem;
+  background:linear-gradient(90deg,var(--accent),transparent);
+  opacity:.5; border-radius:99px;
+}
+
+.status-scope[data-component-id="{{ componentId }}"] .status-card-shell{
+  position:relative; border-radius:16px; overflow:hidden;
+  background:linear-gradient(180deg, rgba(255,255,255,.055), rgba(255,255,255,.03));
+  border:1px solid var(--stroke);
+  box-shadow: var(--ring);
+  transition: transform .18s ease, border-color .2s ease, background .2s ease, filter .2s ease, opacity .18s ease;
+  isolation:isolate;
+}
+.status-scope[data-component-id="{{ componentId }}"] .status-card-shell::after{
+  content:""; position:absolute; inset:-120% -40%; transform:skewX(-20deg) translateX(-20%);
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.10), transparent);
+  transition: opacity .3s ease; opacity:0; pointer-events:none; z-index:1;
+}
+.status-scope[data-component-id="{{ componentId }}"] .status-card-shell:hover::after{
+  animation: statusShine 1.2s ease forwards; opacity:1;
+}
+
+.status-scope[data-component-id="{{ componentId }}"] .mouse-glow{
+  --mx: 50%; --my: 50%;
+  background:
+    radial-gradient(600px 260px at var(--mx) var(--my), rgba(255,255,255,.14), transparent 65%),
+    linear-gradient(180deg, rgba(255,255,255,.055), rgba(255,255,255,.03));
+}
+.status-scope[data-component-id="{{ componentId }}"] .status-card-shell:hover{
+  transform: translateY(-4px);
+  border-color: color-mix(in oklab, var(--accent) 42%, transparent);
+  filter: saturate(1.06);
+}
+
+.status-scope[data-component-id="{{ componentId }}"] .reveal{
+  opacity:0; transform:translateY(14px);
+  transition: opacity .55s ease, transform .55s cubic-bezier(.22,1,.32,1);
+  will-change: opacity, transform;
+}
+.status-scope[data-component-id="{{ componentId }}"] .reveal.in{ opacity:1; transform:none; }
+
+.status-scope[data-component-id="{{ componentId }}"] .status-pager{
+  display:flex; align-items:center; justify-content:center; gap:12px; margin-top:14px; flex-wrap:wrap;
+}
+.status-scope[data-component-id="{{ componentId }}"] .status-pager .hint{ opacity:.8 }
+
+
+.status-scope[data-component-id="{{ componentId }}"] .btn.btn-primary{
+  background:#ffffff; color:#111; border:1px solid rgba(255,255,255,.24);
+  font-weight:800; border-radius:12px; padding:.6rem 1rem;
+}
+.status-scope[data-component-id="{{ componentId }}"] .btn.btn-primary:hover{
+  background:#f2f2f2; color:#000; border-color:#ffffff;
+}
+
+@keyframes statusShine{
+  0% { transform:skewX(-20deg) translateX(-20%) }
+  100% { transform:skewX(-20deg) translateX(140%) }
+}
+
+@media (prefers-reduced-motion: reduce){
+  .status-scope[data-component-id="{{ componentId }}"] .reveal{ opacity:1 !important; transform:none !important; transition:none !important }
+  .status-scope[data-component-id="{{ componentId }}"] .status-card-shell::after{ display:none !important }
+}
+.status-scope[data-component-id="{{ componentId }}"] .status-card-shell > *{
+  position:relative; z-index:2; display:block; padding:14px;
+}
+</style>
+
+<script>
+(function(){
+  function ready(fn){ document.readyState!=='loading' ? fn() : document.addEventListener('DOMContentLoaded', fn); }
+  ready(function(){
+    var scope = document.querySelector('.status-scope[data-component-id="{{ componentId }}"]');
+    if(!scope) return;
+
+    var grid  = scope.querySelector('#statusGrid');
+    if(!grid) return;
+
+  
+    var items = scope.querySelectorAll('.reveal');
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if(reduce){
+      items.forEach(function(el){ el.classList.add('in'); });
+    }else{
+      var io = new IntersectionObserver(function(entries){
+        entries.forEach(function(entry){
+          if(entry.isIntersecting){
+            entry.target.classList.add('in');
+            io.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+      items.forEach(function(el, i){
+        el.style.transitionDelay = (70 * i) + 'ms';
+        io.observe(el);
+      });
+    }
+
+
+    var shells = scope.querySelectorAll('.mouse-glow');
+    shells.forEach(function(card){
+      card.addEventListener('mousemove', function(e){
+        var r = card.getBoundingClientRect();
+        var x = e.clientX - r.left;
+        var y = e.clientY - r.top;
+        card.style.setProperty('--mx', x+'px');
+        card.style.setProperty('--my', y+'px');
+      });
+      card.addEventListener('mouseleave', function(){
+        card.style.setProperty('--mx', '50%');
+        card.style.setProperty('--my', '50%');
+      });
+    });
+
+   
+    var pager     = scope.querySelector('#statusPager');
+    var pagerBtn  = scope.querySelector('#pagerBtn');
+    var pagerHint = scope.querySelector('#pagerHint');
+
+    var cardsAll = Array.from(scope.querySelectorAll('.status-card-shell'));
+    var INITIAL_COUNT = 12;
+    var STEP_COUNT    = 12;
+    var shown = 0;
+
+    function applyPager(firstLoad){
+      var total = cardsAll.length;
+      if(firstLoad){ shown = Math.min(INITIAL_COUNT, total); }
+      else{ shown = Math.min(shown + STEP_COUNT, total); }
+
+      cardsAll.forEach(function(card, i){
+        if(i < shown){
+          card.style.opacity = '';
+          card.style.pointerEvents = '';
+          card.style.display = '';
+        }else{
+          card.style.opacity = '0';
+          card.style.pointerEvents = 'none';
+          card.style.display = 'none';
+        }
+      });
+
+      if(total > shown){
+        pager.hidden = false;
+        pagerBtn.disabled = false;
+        pagerHint.textContent = shown + ' / ' + total + ' shown';
+      }else{
+        pager.hidden = total <= INITIAL_COUNT;
+        pagerHint.textContent = total + ' / ' + total + ' shown';
+      }
+    }
+
+    applyPager(true);
+
+    if(pagerBtn){
+      pagerBtn.addEventListener('click', function(){
+        pagerBtn.disabled = true;
+        setTimeout(function(){ applyPager(false); }, 120);
+      });
+    }
+  });
+})();
+</script>

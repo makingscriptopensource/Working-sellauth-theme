@@ -1,0 +1,178 @@
+{# =======================================
+   components/text-block.njk — ABOUT US
+   Une seule image agrandie, remontée et animée depuis la gauche
+   ======================================= #}
+<section class="about-scope component py-20 single-hero">
+  <div class="container">
+
+    <div class="about-head">
+      <div class="about-pill about-reveal" style="--d:0ms">
+        <span><i class="fa-solid fa-wand-magic-sparkles"></i> {{ properties.pill or 'Want to know more about us?' }}</span>
+      </div>
+      <div class="section-title about-title about-reveal" style="--d:100ms">
+        <h2>{{ (properties.title or 'About Us') | renderString }}</h2>
+      </div>
+    </div>
+
+    <div class="row align-items-center gx-5">
+      <div class="col-12 col-lg-6">
+        <figure class="single-stage">
+          <img class="main about-reveal img-slide"
+               style="--d:200ms"
+               src="https://i.postimg.cc/C5ZHvF85/Nouveau-projet-1.png"
+               alt="Visuel principal"
+               loading="lazy" width="1600" height="900">
+        </figure>
+      </div>
+
+      <div class="col-12 col-lg-6 about-copy">
+        <h3 class="about-h1 about-reveal" style="--d:150ms">
+          {{ (properties.heading or "We're your top choice for Discord needs.") | safe }}
+        </h3>
+
+        <p class="about-lead about-reveal" style="--d:220ms">
+          {{ (properties.subtitle or "With over 24 months of experience, our server boosting service stands as the pinnacle of reliability, respect, and renown in the industry.") | safe }}
+        </p>
+
+        <ul class="about-bullets">
+          <li class="about-reveal" style="--d:280ms"><span></span> 24/7 Customer Support</li>
+          <li class="about-reveal" style="--d:340ms"><span></span> Instant Delivery</li>
+          <li class="about-reveal" style="--d:400ms"><span></span> Most affordable pricing.</li>
+        </ul>
+
+        {% if properties.cta and properties.cta_text %}
+        <a href="{{ properties.cta | shopUrl }}" class="btn btn-primary mt-3 about-reveal" style="--d:460ms">
+          {{ properties.cta_text }}
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="height:1rem;width:1rem;vertical-align:-0.125em"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg>
+        </a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+.single-hero{
+  --accent: var(--mono-accent, #ffffff);
+  --accent-2:#ffffff;
+  --ink:#f5f6fa;
+  --muted:#cbbfd0;
+  --shadow: 0 42px 96px rgba(0,0,0,.50);
+  color:var(--ink);
+}
+
+.single-hero .about-head{
+  display:grid; gap:8px; place-items:center; margin-bottom:8px;
+  max-width:960px; margin-inline:auto;
+}
+.single-hero .about-pill span{
+  display:inline-flex; gap:.6rem; align-items:center; padding:9px 18px; border-radius:999px;
+  font-weight:800; letter-spacing:.02em; color:#0f0f10;
+  background:linear-gradient(90deg,var(--accent-2),var(--accent));
+  box-shadow:0 12px 26px rgba(255,255,255,.20), inset 0 1px 0 rgba(255,255,255,.35);
+}
+.single-hero .about-title h2{
+  text-align:center; color:#fff; font-weight:900; letter-spacing:-.018em; line-height:1.05;
+  font-size:clamp(40px,5.2vw,72px);
+  text-shadow:0 2px 0 rgba(0,0,0,.20), 0 18px 40px rgba(0,0,0,.35);
+}
+
+.single-hero .single-stage{
+  position: relative;
+  width: 270%;
+  max-width: 1300px;
+  margin-left: -45%;
+  margin-top: -160px;
+}
+.single-hero .main{
+  width: 100%;
+  height: auto;
+  display: block;
+  filter: drop-shadow(var(--shadow));
+  will-change: transform, opacity;
+}
+
+.single-hero .about-reveal{
+  opacity:0;
+  transition: opacity .6s ease, transform .6s cubic-bezier(.22,1,.24,1);
+  transition-delay: var(--d, 0ms);
+}
+.single-hero.in .about-reveal{
+  opacity:1; transform:none;
+}
+
+.single-hero .img-slide{ transform: translateX(-60px); }
+.single-hero.in .img-slide{ transform: translateX(0); }
+
+.single-hero .about-copy{ color:var(--ink); }
+.single-hero .about-h1{
+  font-size:clamp(22px,2.6vw,36px); font-weight:900; color:#fff; margin:6px 0 12px; letter-spacing:-.01em;
+}
+.single-hero .about-lead{ color:var(--muted); margin-bottom:12px; }
+.single-hero .about-bullets{
+  list-style:none; padding:0; margin:0; display:grid; gap:10px;
+}
+.single-hero .about-bullets li{
+  display:flex; align-items:center; gap:12px; font-weight:700; color:#f0f0f0;
+}
+.single-hero .about-bullets li span{
+  width:10px; height:10px; border-radius:50%;
+  background:radial-gradient(circle, #ffffff 35%, var(--accent) 60%, #cccccc 100%);
+  box-shadow:0 0 18px rgba(255,255,255,.65);
+  display:inline-block; flex:0 0 auto;
+}
+
+@media (max-width: 992px){
+  .single-hero .single-stage{
+    width: 130%; max-width: 860px; margin-left: -10%; margin-top: -20px;
+  }
+}
+@media (max-width: 640px){
+  .single-hero .single-stage{
+    width: 100%; max-width: 100%; margin-left: 0; margin-top: 0;
+  }
+}
+</style>
+
+<script>
+(function(){
+  var root = document.querySelector('.single-hero');
+  if(!root) return;
+
+  function inView(){
+    var r = root.getBoundingClientRect();
+    var vh = window.innerHeight || document.documentElement.clientHeight;
+    return r.top < vh * 0.88 && r.bottom > vh * 0.12;
+  }
+  function run(){ root.classList.add('in'); }
+
+  function boot(){
+    if (inView()) { run(); return; }
+    if ('IntersectionObserver' in window){
+      var io = new IntersectionObserver(function(entries, obs){
+        if (entries.some(function(e){ return e.isIntersecting; })){
+          run(); obs.disconnect();
+        }
+      }, {threshold: 0.2, rootMargin: '0px 0px -10% 0px'});
+      io.observe(root);
+    } else {
+      var fn = function(){
+        if (inView()){
+          run();
+          window.removeEventListener('scroll', fn, {passive:true});
+          window.removeEventListener('resize', fn);
+        }
+      };
+      window.addEventListener('scroll', fn, {passive:true});
+      window.addEventListener('resize', fn);
+      fn();
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot, { once:true });
+  } else {
+    boot();
+  }
+})();
+</script>
